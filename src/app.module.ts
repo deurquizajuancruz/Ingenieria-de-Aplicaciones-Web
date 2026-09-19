@@ -1,22 +1,33 @@
 import { Module } from '@nestjs/common';
-import { createObserveModule } from '@nestjs/observe';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
-
-export const { ObserveModule, ObserveInstrument } = createObserveModule();
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { User, UserSchema } from './schemas/user.schema.js';
+import { Site, SiteSchema } from './schemas/site.schema.js';
+import {
+  PageDocument,
+  PageDocumentSchema,
+} from './schemas/pageDocument.schema.js';
+import { Job, JobSchema } from './schemas/job.schema.js';
+import { UserService } from './services/user.service.js';
+import { UserController } from './controllers/user.controller.js';
 
 @Module({
   imports: [
-    // Distributed tracing, auto-correlated logs, request/job metrics, error
-    // telemetry, alarms, and more — out of the box. Sign up at https://observe.nestjs.com
-    ObserveModule.forRoot({
-      appKey: process.env.OBSERVE_APP_KEY ?? '',
-      appSecret: process.env.OBSERVE_APP_SECRET ?? '',
-      runtimeMetrics: !Boolean(process.versions?.['webcontainer']),
-      serviceId: 'nest-typescript-starter',
+    ConfigModule.forRoot({ isGlobal: true }),
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        uri: config.get<string>('MONGODB_URI'),
+      }),
     }),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: Site.name, schema: SiteSchema },
+      { name: PageDocument.name, schema: PageDocumentSchema },
+      { name: Job.name, schema: JobSchema },
+    ]),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [UserController],
+  providers: [UserService],
 })
 export class AppModule {}
