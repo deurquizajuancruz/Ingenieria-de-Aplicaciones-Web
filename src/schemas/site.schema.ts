@@ -7,7 +7,7 @@ export type SiteDocument = HydratedDocument<Site>;
 @Schema({ timestamps: true })
 export class Site {
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  userId: User;
+  userId: mongoose.Types.ObjectId;
 
   @Prop({ required: true })
   name: string;
