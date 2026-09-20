@@ -12,6 +12,8 @@ import { UserService } from './services/user.service.js';
 import { UserController } from './controllers/user.controller.js';
 import { SiteController } from './controllers/site.controller.js';
 import { SiteService } from './services/site.service.js';
+import { JobController } from './controllers/job.controller.js';
+import { JobService } from './services/job.service.js';
 
 @Module({
   imports: [
@@ -29,7 +31,7 @@ import { SiteService } from './services/site.service.js';
       { name: Job.name, schema: JobSchema },
     ]),
   ],
-  controllers: [UserController, SiteController],
-  providers: [UserService, SiteService],
+  controllers: [UserController, SiteController, JobController],
+  providers: [UserService, SiteService, JobService],
 })
 export class AppModule {}

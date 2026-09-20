@@ -12,7 +12,7 @@ export class SiteController {
     return await this.siteService.createSite(body);
   }
 
-  @Get('user')
+  @Get('')
   async getUserSites(@Query('userId') userId: string) {
     return await this.siteService.getUserSites(
       new mongoose.Types.ObjectId(userId),

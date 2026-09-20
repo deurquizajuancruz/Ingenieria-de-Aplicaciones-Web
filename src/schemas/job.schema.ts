@@ -18,7 +18,7 @@ export class Job {
     ref: 'Site',
     index: true,
   })
-  siteId: Site;
+  siteId: mongoose.Types.ObjectId;
 
   @Prop()
   finishedAt: Date;
