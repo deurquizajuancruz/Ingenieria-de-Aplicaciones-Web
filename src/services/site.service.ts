@@ -29,4 +29,15 @@ export class SiteService {
   async existsSite(siteId: mongoose.Types.ObjectId) {
     return (await this.siteModel.exists({ _id: siteId })) !== null;
   }
+
+  async changeSiteStatus(siteId: mongoose.Types.ObjectId) {
+    const site = await this.siteModel.findById(siteId);
+    if (site == null) {
+      throw new NotFoundException(
+        `Site with id ${siteId.toString()} not found`,
+      );
+    }
+    site.active = !site.active;
+    return await site.save();
+  }
 }
