@@ -44,6 +44,14 @@ export class JobService {
       .populate('siteId', 'name');
   }
 
+  async getJob(jobId: mongoose.Types.ObjectId) {
+    const job = await this.jobModel.findById(jobId);
+    if (job === null) {
+      throw new NotFoundException(`Job with id ${jobId.toString()} not found`);
+    }
+    return job;
+  }
+
   async existsJob(jobId: mongoose.Types.ObjectId) {
     return (await this.jobModel.exists({ _id: jobId })) !== null;
   }

@@ -16,20 +16,6 @@ import {
 export class SiteController {
   constructor(private readonly siteService: SiteService) {}
 
-  @Post()
-  @ApiOperation({
-    summary: 'Crear un sitio',
-    description:
-      'Registra un sitio con su profundidad, frecuencia y extractor.',
-  })
-  @ApiCreatedResponse({ description: 'Sitio creado correctamente.' })
-  @ApiBadRequestResponse({
-    description: 'El body es inválido.',
-  })
-  async createSite(@Body() body: CreateSiteDto) {
-    return await this.siteService.createSite(body);
-  }
-
   @Get('')
   @ApiOperation({
     summary: 'Listar los sitios de un usuario',
@@ -48,5 +34,19 @@ export class SiteController {
     @Query('userId', TransformObjectId) userId: mongoose.Types.ObjectId,
   ) {
     return await this.siteService.getUserSites(userId);
+  }
+
+  @Post()
+  @ApiOperation({
+    summary: 'Crear un sitio',
+    description:
+      'Registra un sitio con su profundidad, frecuencia y extractor.',
+  })
+  @ApiCreatedResponse({ description: 'Sitio creado correctamente.' })
+  @ApiBadRequestResponse({
+    description: 'El body es inválido.',
+  })
+  async createSite(@Body() body: CreateSiteDto) {
+    return await this.siteService.createSite(body);
   }
 }

@@ -24,6 +24,7 @@ export class PageDocumentController {
   })
   @ApiQuery({
     name: 'jobId',
+    type: String,
     description: 'ObjectId del job cuyos documentos se quieren listar.',
     example: '507f1f77bcf86cd799439011',
   })
