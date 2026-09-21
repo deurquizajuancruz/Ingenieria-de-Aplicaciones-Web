@@ -22,22 +22,34 @@ export class JobController {
   @ApiOperation({
     summary: 'Listar los jobs de un usuario',
     description:
-      'Devuelve todos los jobs disparados sobre los sitios del usuario dado.',
+      'Devuelve los jobs disparados sobre los sitios del usuario dado. ' +
+      'Si se envía siteId, se acotan a ese sitio; el sitio debe pertenecer al usuario.',
   })
   @ApiQuery({
     name: 'userId',
     type: String,
+    required: true,
     description: 'ObjectId del usuario dueño de los sitios.',
     example: '507f1f77bcf86cd799439011',
   })
   @ApiQuery({
     name: 'siteId',
+    type: String,
     required: false,
-    description: 'ObjectId del sitio al cual pertenecen los jobs.'
+    description:
+      'ObjectId de un sitio del usuario. Si se omite, se devuelven los jobs de todos sus sitios.',
+    example: '507f1f77bcf86cd799439012',
   })
-  @ApiOkResponse({ description: 'Listado de jobs del usuario.' })
-  @ApiBadRequestResponse({ description: 'El userId no es un ObjectId válido.' })
-  @ApiNotFoundResponse({ description: 'El user no existe' })
+  @ApiOkResponse({
+    description:
+      'Listado de jobs. Array vacío si el usuario no tiene sitios o no hay jobs.',
+  })
+  @ApiBadRequestResponse({
+    description: 'userId o siteId no son ObjectId válidos.',
+  })
+  @ApiNotFoundResponse({
+    description: 'El usuario no existe, o el sitio no pertenece al usuario.',
+  })
   async getUserJobs(@Query() data: GetUserJobsDto) {
     const transformer = new TransformObjectId();
     const userId = transformer.transform(data.userId);
@@ -45,7 +57,7 @@ export class JobController {
     return await this.jobService.getUserJobs(userId, siteId);
   }
 
-  @Get(':id')
+  @Get(':jobId')
   @ApiOperation({ summary: 'Obtener un job por id' })
   @ApiParam({
     name: 'jobId',
