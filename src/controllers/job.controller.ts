@@ -11,6 +11,7 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { TransformObjectId } from '../helpers/transform-object-id.js';
+import { GetUserJobsDto } from '../dtos/job/get-user-jobs.dto.js';
 
 @Controller('jobs')
 export class JobController {
@@ -27,12 +28,18 @@ export class JobController {
     description: 'ObjectId del usuario dueño de los sitios.',
     example: '507f1f77bcf86cd799439011',
   })
+  @ApiQuery({
+    name: 'siteId',
+    required: false,
+    description: 'ObjectId del sitio al cual pertenecen los jobs.'
+  })
   @ApiOkResponse({ description: 'Listado de jobs del usuario.' })
   @ApiBadRequestResponse({ description: 'El userId no es un ObjectId válido.' })
-  async getUserJobs(
-    @Query('userId', TransformObjectId) userId: mongoose.Types.ObjectId,
-  ) {
-    return await this.jobService.getUserJobs(userId);
+  async getUserJobs(@Query() data: GetUserJobsDto) {
+    const transformer = new TransformObjectId();
+    const userId = transformer.transform(data.userId);
+    const siteId = data.siteId ? transformer.transform(data.siteId) : undefined;
+    return await this.jobService.getUserJobs(userId, siteId);
   }
 
   // eliminar

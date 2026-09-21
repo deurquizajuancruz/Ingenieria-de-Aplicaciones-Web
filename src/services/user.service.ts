@@ -8,11 +8,11 @@ import { CreateUserDto } from '../dtos/user/create-user.dto.js';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async createUser(data: CreateUserDto) {
-    if (await this.existsUserSub(data.sub)) {
+  async createUser(sub: string) {
+    if (await this.existsUserSub(sub)) {
       throw new ConflictException('User already exists');
     }
-    return await this.userModel.create({ sub: data.sub });
+    return await this.userModel.create({ sub: sub });
   }
 
   async existsUser(userId: mongoose.Types.ObjectId) {

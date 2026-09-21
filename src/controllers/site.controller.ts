@@ -37,6 +37,7 @@ export class SiteController {
   })
   @ApiQuery({
     name: 'userId',
+    type: String,
     description: 'ObjectId del usuario dueño de los sitios.',
     example: '507f1f77bcf86cd799439011',
   })

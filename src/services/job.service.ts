@@ -25,9 +25,20 @@ export class JobService {
     });
   }
 
-  async getUserJobs(userId: mongoose.Types.ObjectId) {
+  async getUserJobs(
+    userId: mongoose.Types.ObjectId,
+    siteId?: mongoose.Types.ObjectId,
+  ) {
     const sites = await this.siteService.getUserSites(userId);
-    const idSites = sites.map((s) => s._id);
+    let idSites = sites.map((s) => s._id);
+    if (siteId !== undefined) {
+      if (!idSites.some((sId) => sId.equals(siteId))) {
+        throw new NotFoundException(
+          `Site id ${siteId.toString()} not found for user ${userId}`,
+        );
+      }
+      idSites = [siteId];
+    }
     return this.jobModel
       .find({ siteId: { $in: idSites } })
       .populate('siteId', 'name');

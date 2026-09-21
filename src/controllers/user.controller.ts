@@ -28,7 +28,7 @@ export class UserController {
   @ApiConflictResponse({
     description: 'Ya existe ese usuario.',
   })
-  async createUser(@Body() body: CreateUserDto): Promise<User> {
-    return await this.userService.createUser(body);
+  async createUser(@Body() body: CreateUserDto,): Promise<User> {
+    return await this.userService.createUser(body.sub);
   }
 }
