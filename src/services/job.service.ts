@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
-import { Job, JobDocument } from '../schemas/job.schema.js';
+import { Job, JobDocument, StateEnum } from '../schemas/job.schema.js';
 import { SiteService } from './site.service.js';
 
 @Injectable()
@@ -11,8 +11,18 @@ export class JobService {
     private readonly siteService: SiteService,
   ) {}
 
-  async createJob() {
-
+  // posible eliminado
+  async createJob(siteId: mongoose.Types.ObjectId) {
+    if (!(await this.siteService.existsSite(siteId))) {
+      throw new NotFoundException(`Site ${siteId.toString()} not found`);
+    }
+    return this.jobModel.create({
+      siteId: siteId,
+      finishedAt: undefined,
+      state: StateEnum.IN_PROGRESS,
+      numberPages: 56,
+      amountDocuments: 60,
+    });
   }
 
   async getUserJobs(userId: mongoose.Types.ObjectId) {
@@ -21,5 +31,9 @@ export class JobService {
     return this.jobModel
       .find({ siteId: { $in: idSites } })
       .populate('siteId', 'name');
+  }
+
+  async existsJob(jobId: mongoose.Types.ObjectId) {
+    return (await this.jobModel.exists({ _id: jobId })) !== null;
   }
 }

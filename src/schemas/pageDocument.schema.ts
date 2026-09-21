@@ -12,7 +12,7 @@ export class PageDocument {
     ref: 'Job',
     index: true,
   })
-  jobId: Job;
+  jobId: mongoose.Types.ObjectId;
 
   @Prop({ required: true, min: 0 })
   depthLevel: number;
