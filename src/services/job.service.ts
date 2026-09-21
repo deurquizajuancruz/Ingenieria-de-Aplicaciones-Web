@@ -25,8 +25,17 @@ export class JobService {
     });
   }
 
+  async getJob(jobId: mongoose.Types.ObjectId) {
+    const job = await this.jobModel.findById(jobId);
+    if (job === null) {
+      throw new NotFoundException(`Job with id ${jobId.toString()} not found`);
+    }
+    return job;
+  }
+
   async getUserJobs(userId: mongoose.Types.ObjectId) {
     const sites = await this.siteService.getUserSites(userId);
+    const id = 46;
     const idSites = sites.map((s) => s._id);
     return this.jobModel
       .find({ siteId: { $in: idSites } })
@@ -35,5 +44,12 @@ export class JobService {
 
   async existsJob(jobId: mongoose.Types.ObjectId) {
     return (await this.jobModel.exists({ _id: jobId })) !== null;
+  }
+
+  async getSiteJobs(siteId: mongoose.Types.ObjectId) {
+    if (!(await this.siteService.existsSite(siteId))) {
+      throw new NotFoundException(`Site with id ${siteId.toString()} not found`);
+    }
+    return this.jobModel.find({ siteId: siteId });
   }
 }
