@@ -20,7 +20,7 @@ export class JobController {
 
   @Get('')
   @ApiOperation({
-    summary: 'Listar los jobs de un usuario',
+    summary: 'Listar los jobs de un usuario y opcionalmente de un sitio',
     description:
       'Devuelve los jobs disparados sobre los sitios del usuario dado. ' +
       'Si se envía siteId, se acotan a ese sitio; el sitio debe pertenecer al usuario.',

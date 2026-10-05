@@ -38,7 +38,7 @@ const SiteForm = () => {
     e.preventDefault();
 
     const payload: Site = {
-      userId: '6ab059bdafbad0ade39c84d1', // harcodeado por ahora
+      userId: '6ab059bdafbad0ade39c84d1', // harcoddeado por ahora
       name: name,
       url: url,
       depth: Number(depth),
@@ -48,12 +48,8 @@ const SiteForm = () => {
     }
 
     try {
-      const data = await apiFetch('/sites', 'POST', payload);
-      if (data) {
-        navigate('/');
-      } else {
-        throw new ApiError(500, 'Error inesperado');
-      }
+      await apiFetch('/sites', 'POST', payload);
+      navigate('/success', { state: name });
     } catch (error: ApiError | any) {
       throw new ApiError(error.code, error.message);
     }
