@@ -1,0 +1,20 @@
+.sidebar {
+    width: 230px;
+}
+
+.sidebar-link {
+    padding: 0.75rem 1.5rem;
+    color: var(--bs-body-color);
+    font-size: 1.15rem;
+    text-decoration: none;
+    border-left: 4px solid transparent;
+}
+
+.sidebar-link:hover {
+    background-color: var(--bs-tertiary-bg);
+}
+
+.sidebar-link.active {
+    border-left-color: var(--bs-emphasis-color);
+    font-weight: 600;
+}
